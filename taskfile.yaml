@@ -5,6 +5,16 @@ tasks:
     cmds:
       - ./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1G
 
+  ccs:
+    cmds:
+      - ./vendor/bin/pint --config pint.json -v --test
+
+  ccs:fix:
+    aliases: [ fix ]
+    cmds:
+      - ./vendor/bin/pint --config pint.json
+
   ci:
     cmds:
       - task: phpstan
+      - task: ccs
