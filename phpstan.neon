@@ -1,0 +1,15 @@
+parameters:
+	level: 9
+	paths:
+		- app
+		- database/factories
+		- database/seeders
+		- routes
+		- tests
+
+	ignoreErrors:
+	    -
+	        message: '#^Undefined variable: \$this$#'
+	        paths:
+	            - routes/console.php
+	            - tests/*
