@@ -14,7 +14,12 @@ tasks:
     cmds:
       - ./vendor/bin/pint --config pint.json
 
+  test:
+    cmds:
+      - php artisan test {{.CLI_ARGS}}
+
   ci:
     cmds:
       - task: phpstan
       - task: ccs
+      - task: test

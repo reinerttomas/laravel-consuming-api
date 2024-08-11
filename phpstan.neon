@@ -13,3 +13,8 @@ parameters:
 	        paths:
 	            - routes/console.php
 	            - tests/*
+
+	    -
+	        message: '#^Call to an undefined method Pest\\PendingCalls\\TestCall::expect\(\).#'
+	        paths:
+	            - tests/*
