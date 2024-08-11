@@ -10,9 +10,16 @@ tasks:
       - ./vendor/bin/pint --config pint.json -v --test
 
   ccs:fix:
-    aliases: [ fix ]
     cmds:
       - ./vendor/bin/pint --config pint.json
+
+  rector:
+    cmds:
+      - vendor/bin/rector --dry-run
+
+  rector:fix:
+    cmds:
+      - vendor/bin/rector
 
   test:
     cmds:
@@ -20,6 +27,12 @@ tasks:
 
   ci:
     cmds:
+      - task: rector
       - task: phpstan
       - task: ccs
       - task: test
+
+  fix:
+    cmds:
+      - task: rector:fix
+      - task: ccs:fix
