@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
 
-arch('extends base model')
+arch('to be models')
     ->expect('App\Models')
+    ->toBeClass()
+    ->toBeFinal()
     ->toExtend(Model::class);
