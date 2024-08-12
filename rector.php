@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Set\ValueObject\SetList;
 use RectorLaravel\Set\LaravelSetList;
 
@@ -18,6 +19,7 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__ . '/bootstrap/cache',
+        AddOverrideAttributeToOverriddenMethodsRector::class,
     ])
     ->withPhpSets(php83: true)
     ->withSets([
