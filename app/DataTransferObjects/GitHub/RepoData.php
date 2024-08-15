@@ -13,8 +13,8 @@ final readonly class RepoData
         public string $owner,
         public string $name,
         public string $fullName,
-        public string $private,
-        public int $description,
+        public bool $private,
+        public string $description,
         public CarbonInterface $createdAt,
     ) {}
 }

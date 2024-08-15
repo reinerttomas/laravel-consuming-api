@@ -9,6 +9,8 @@ use App\Contracts\GitHub;
 use App\DataTransferObjects\GitHub\CreateRepoData;
 use App\DataTransferObjects\GitHub\RepoData;
 use App\DataTransferObjects\GitHub\UpdateRepoData;
+use App\Http\Integrations\GitHub\GitHubConnector;
+use App\Http\Integrations\GitHub\Requests\GetRepo;
 
 final readonly class GitHubService implements GitHub
 {
@@ -21,9 +23,15 @@ final readonly class GitHubService implements GitHub
         // TODO: Implement getRepos() method.
     }
 
+    /**
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
+     */
     public function getRepo(string $owner, string $repoName): RepoData
     {
-        // TODO: Implement getRepo() method.
+        return $this->connector()
+            ->send(new GetRepo($owner, $repoName))
+            ->dtoOrFail();
     }
 
     public function getRepoLanguages(): array
@@ -44,5 +52,10 @@ final readonly class GitHubService implements GitHub
     public function deleteRepo(string $owner, string $repoName): void
     {
         // TODO: Implement deleteRepo() method.
+    }
+
+    private function connector(): GitHubConnector
+    {
+        return new GitHubConnector($this->token);
     }
 }
