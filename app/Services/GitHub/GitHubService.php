@@ -22,7 +22,7 @@ final readonly class GitHubService implements GitHub
 
     public function getRepos(string $username): RepoCollection
     {
-        // TODO: Implement getRepos() method.
+        throw new \Exception('Not implemented');
     }
 
     /**
@@ -62,12 +62,12 @@ final readonly class GitHubService implements GitHub
 
     public function updateRepo(string $owner, string $repoName, UpdateRepoData $data): RepoData
     {
-        // TODO: Implement updateRepo() method.
+        throw new \Exception('Not implemented');
     }
 
     public function deleteRepo(string $owner, string $repoName): void
     {
-        // TODO: Implement deleteRepo() method.
+        throw new \Exception('Not implemented');
     }
 
     private function connector(): GitHubConnector
