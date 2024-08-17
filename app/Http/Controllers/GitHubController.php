@@ -16,8 +16,14 @@ final class GitHubController extends Controller
             repoName: $name,
         );
 
+        $languages = $gitHub->getRepoLanguages(
+            owner: $owner,
+            repoName: $name,
+        );
+
         return view('repos.show')->with([
             'repo' => $repo,
+            'languages' => $languages,
         ]);
     }
 }

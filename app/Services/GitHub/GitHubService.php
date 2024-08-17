@@ -11,6 +11,7 @@ use App\DataTransferObjects\GitHub\RepoData;
 use App\DataTransferObjects\GitHub\UpdateRepoData;
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\GetRepo;
+use App\Http\Integrations\GitHub\Requests\GetRepoLanguages;
 
 final readonly class GitHubService implements GitHub
 {
@@ -34,9 +35,17 @@ final readonly class GitHubService implements GitHub
             ->dtoOrFail();
     }
 
-    public function getRepoLanguages(): array
+    /**
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
+     */
+    public function getRepoLanguages(string $owner, string $repoName): array
     {
-        // TODO: Implement getRepoLanguages() method.
+        return $this->connector()
+            ->send(new GetRepoLanguages($owner, $repoName))
+            ->collect()
+            ->keys()
+            ->all();
     }
 
     public function createRepo(CreateRepoData $data): RepoData

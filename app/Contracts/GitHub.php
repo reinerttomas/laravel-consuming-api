@@ -18,7 +18,7 @@ interface GitHub
     /**
      * @return list<string>
      */
-    public function getRepoLanguages(): array;
+    public function getRepoLanguages(string $owner, string $repoName): array;
 
     public function createRepo(CreateRepoData $data): RepoData;
 
