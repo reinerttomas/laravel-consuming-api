@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Integrations\GitHub\Requests;
 
 use App\DataTransferObjects\GitHub\RepoData;
-use Carbon\CarbonImmutable;
+use App\Http\Integrations\GitHub\Transformers\RepoDataTransformer;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
@@ -29,16 +29,6 @@ final class GetRepo extends Request
      */
     public function createDtoFromResponse(Response $response): RepoData
     {
-        $data = $response->json();
-
-        return new RepoData(
-            id: $data['id'],
-            owner: $data['owner']['login'],
-            name: $data['name'],
-            fullName: $data['full_name'],
-            private: $data['private'],
-            description: $data['description'] ?? '',
-            createdAt: CarbonImmutable::parse($data['created_at'])
-        );
+        return (new RepoDataTransformer)->toDto($response->json());
     }
 }
