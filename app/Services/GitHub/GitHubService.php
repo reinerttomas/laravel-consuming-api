@@ -10,6 +10,7 @@ use App\DataTransferObjects\GitHub\CreateRepoData;
 use App\DataTransferObjects\GitHub\RepoData;
 use App\DataTransferObjects\GitHub\UpdateRepoData;
 use App\Http\Integrations\GitHub\GitHubConnector;
+use App\Http\Integrations\GitHub\Requests\CreateRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepoLanguages;
 
@@ -48,9 +49,15 @@ final readonly class GitHubService implements GitHub
             ->all();
     }
 
+    /**
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
+     */
     public function createRepo(CreateRepoData $data): RepoData
     {
-        // TODO: Implement createRepo() method.
+        return $this->connector()
+            ->send(new CreateRepo($data))
+            ->dtoOrFail();
     }
 
     public function updateRepo(string $owner, string $repoName, UpdateRepoData $data): RepoData
