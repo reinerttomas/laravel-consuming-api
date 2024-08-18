@@ -45,6 +45,6 @@ final class CreateRepo extends Request implements HasBody
      */
     public function createDtoFromResponse(Response $response): RepoData
     {
-        return (new RepoDataTransformer)->toDto($response->json());
+        return RepoDataTransformer::make()->toDto($response->json());
     }
 }

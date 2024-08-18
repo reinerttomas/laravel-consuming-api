@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Integrations\GitHub\Transformers;
 
-use App\Contracts\Transformer;
 use App\DataTransferObjects\GitHub\RepoData;
+use App\Transformer\BaseTransformer;
 use Carbon\CarbonImmutable;
 
 /**
- * @implements Transformer<\App\DataTransferObjects\GitHub\RepoData>
+ * @extends BaseTransformer<\App\DataTransferObjects\GitHub\RepoData>
  */
-final readonly class RepoDataTransformer implements Transformer
+final class RepoDataTransformer extends BaseTransformer
 {
     public function toDto(array $data): RepoData
     {
