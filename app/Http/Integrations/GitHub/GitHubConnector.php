@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Integrations\GitHub;
 
+use GuzzleHttp\Psr7\Header;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Connector;
+use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Saloon\PaginationPlugin\Contracts\HasPagination;
+use Saloon\PaginationPlugin\PagedPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-final class GitHubConnector extends Connector
+final class GitHubConnector extends Connector implements HasPagination
 {
     use AcceptsJson;
 
@@ -34,5 +39,27 @@ final class GitHubConnector extends Connector
     public function defaultAuth(): TokenAuthenticator
     {
         return new TokenAuthenticator($this->token);
+    }
+
+    public function paginate(Request $request): PagedPaginator
+    {
+        return new class(connector: $this, request: $request) extends PagedPaginator
+        {
+            protected ?int $perPageLimit = 100;
+
+            protected function isLastPage(Response $response): bool
+            {
+                $linkHeader = Header::parse($response->header('Link') ?? []);
+
+                return \collect($linkHeader)
+                    ->where(fn (array $link): bool => $link['rel'] === 'next')
+                    ->isEmpty();
+            }
+
+            protected function getPageItems(Response $response, Request $request): array
+            {
+                return $response->dtoOrFail()->toArray();
+            }
+        };
     }
 }

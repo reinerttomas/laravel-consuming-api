@@ -12,6 +12,7 @@ use App\DataTransferObjects\GitHub\UpdateRepoData;
 use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\CreateRepo;
 use App\Http\Integrations\GitHub\Requests\DeleteRepo;
+use App\Http\Integrations\GitHub\Requests\GetAuthUserRepos;
 use App\Http\Integrations\GitHub\Requests\GetRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepoLanguages;
 use App\Http\Integrations\GitHub\Requests\UpdateRepo;
@@ -22,9 +23,14 @@ final readonly class GitHubService implements GitHub
         private string $token,
     ) {}
 
-    public function getRepos(string $username): RepoCollection
+    public function getRepos(): RepoCollection
     {
-        throw new \Exception('Not implemented');
+        $repos = $this->connector()
+            ->paginate(new GetAuthUserRepos)
+            ->collect()
+            ->ensure(RepoData::class);
+
+        return RepoCollection::make($repos);
     }
 
     /**
