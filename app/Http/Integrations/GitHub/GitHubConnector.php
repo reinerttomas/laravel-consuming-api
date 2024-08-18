@@ -12,10 +12,12 @@ use Saloon\Http\Response;
 use Saloon\PaginationPlugin\Contracts\HasPagination;
 use Saloon\PaginationPlugin\PagedPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 
 final class GitHubConnector extends Connector implements HasPagination
 {
     use AcceptsJson;
+    use AlwaysThrowOnErrors;
 
     private const string BASE_URL = 'https://api.github.com/';
 
