@@ -13,13 +13,19 @@ use Saloon\PaginationPlugin\Contracts\HasPagination;
 use Saloon\PaginationPlugin\PagedPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use Saloon\Traits\Plugins\HasTimeout;
 
 final class GitHubConnector extends Connector implements HasPagination
 {
     use AcceptsJson;
     use AlwaysThrowOnErrors;
+    use HasTimeout;
 
     private const string BASE_URL = 'https://api.github.com/';
+
+    protected int $connectTimeout = 10;
+
+    protected int $requestTimeout = 30;
 
     public function __construct(public readonly string $token) {}
 
