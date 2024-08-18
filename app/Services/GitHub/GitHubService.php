@@ -13,6 +13,7 @@ use App\Http\Integrations\GitHub\GitHubConnector;
 use App\Http\Integrations\GitHub\Requests\CreateRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepoLanguages;
+use App\Http\Integrations\GitHub\Requests\UpdateRepo;
 
 final readonly class GitHubService implements GitHub
 {
@@ -60,9 +61,17 @@ final readonly class GitHubService implements GitHub
             ->dtoOrFail();
     }
 
+    /**
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
+     */
     public function updateRepo(string $owner, string $repoName, UpdateRepoData $data): RepoData
     {
-        throw new \Exception('Not implemented');
+        return $this->connector()
+            ->send(
+                new UpdateRepo(owner: $owner, repoName: $repoName, data: $data)
+            )
+            ->dtoOrFail();
     }
 
     public function deleteRepo(string $owner, string $repoName): void
