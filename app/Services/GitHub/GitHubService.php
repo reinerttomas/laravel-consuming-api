@@ -10,6 +10,7 @@ use App\DataTransferObjects\GitHub\CreateRepoData;
 use App\DataTransferObjects\GitHub\RepoData;
 use App\DataTransferObjects\GitHub\UpdateRepoData;
 use App\Http\Integrations\GitHub\GitHubConnector;
+use App\Http\Integrations\GitHub\Middlewares\AddSignatureHeader;
 use App\Http\Integrations\GitHub\Requests\CreateRepo;
 use App\Http\Integrations\GitHub\Requests\DeleteRepo;
 use App\Http\Integrations\GitHub\Requests\GetAuthUserRepos;
@@ -89,6 +90,9 @@ final readonly class GitHubService implements GitHub
 
     private function connector(): GitHubConnector
     {
-        return new GitHubConnector($this->token);
+        $connector = new GitHubConnector($this->token);
+        $connector->middleware()->onRequest(new AddSignatureHeader);
+
+        return $connector;
     }
 }
