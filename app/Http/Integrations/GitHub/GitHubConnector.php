@@ -8,12 +8,17 @@ use App\Exceptions\Integrations\GitHub\GitHubException;
 use App\Exceptions\Integrations\GitHub\NotFoundException;
 use App\Exceptions\Integrations\GitHub\UnauthorizedException;
 use GuzzleHttp\Psr7\Header;
+use Illuminate\Support\Facades\Cache;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Connector;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\PaginationPlugin\Contracts\HasPagination;
 use Saloon\PaginationPlugin\PagedPaginator;
+use Saloon\RateLimitPlugin\Contracts\RateLimitStore;
+use Saloon\RateLimitPlugin\Limit;
+use Saloon\RateLimitPlugin\Stores\LaravelCacheStore;
+use Saloon\RateLimitPlugin\Traits\HasRateLimits;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
@@ -23,6 +28,7 @@ final class GitHubConnector extends Connector implements HasPagination
 {
     use AcceptsJson;
     use AlwaysThrowOnErrors;
+    use HasRateLimits;
     use HasTimeout;
 
     private const string BASE_URL = 'https://api.github.com/';
@@ -94,5 +100,21 @@ final class GitHubConnector extends Connector implements HasPagination
                 previous: $senderException,
             ),
         };
+    }
+
+    /**
+     * @return list<Limit>
+     */
+    protected function resolveLimits(): array
+    {
+        return [
+            Limit::allow(requests: 10)->everySeconds(seconds: 1),
+            Limit::allow(requests: 500)->everyHour(),
+        ];
+    }
+
+    protected function resolveRateLimitStore(): RateLimitStore
+    {
+        return new LaravelCacheStore(Cache::store(\config('cache.default')));
     }
 }

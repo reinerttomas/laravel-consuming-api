@@ -11,6 +11,7 @@
         "saloonphp/laravel-http-sender": "^3.0",
         "saloonphp/laravel-plugin": "^3.5",
         "saloonphp/pagination-plugin": "^2.2",
+        "saloonphp/rate-limit-plugin": "^2.0",
         "saloonphp/saloon": "^3.10"
     },
     "require-dev": {

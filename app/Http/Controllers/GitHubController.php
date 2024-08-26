@@ -11,6 +11,7 @@ use App\Exceptions\Integrations\GitHub\UnauthorizedException;
 use App\Http\Requests\GitHub\StoreRepoRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Saloon\RateLimitPlugin\Exceptions\RateLimitReachedException;
 
 final class GitHubController extends Controller
 {
@@ -21,17 +22,27 @@ final class GitHubController extends Controller
         ]);
     }
 
-    public function show(string $owner, string $name, GitHub $gitHub): View
+    public function show(string $owner, string $name, GitHub $gitHub): RedirectResponse|View
     {
-        $repo = $gitHub->getRepo(
-            owner: $owner,
-            repoName: $name,
-        );
 
-        $languages = $gitHub->getRepoLanguages(
-            owner: $owner,
-            repoName: $name,
-        );
+        try {
+            $repo = $gitHub->getRepo(
+                owner: $owner,
+                repoName: $name,
+            );
+            $languages = $gitHub->getRepoLanguages(
+                owner: $owner,
+                repoName: $name,
+            );
+        } catch (RateLimitReachedException $e) {
+            $seconds = $e->getLimit()->getRemainingSeconds();
+
+            return redirect(route('dashboard'))
+                ->with(
+                    'error',
+                    'Rate limit exceeded. Please try again in ' . $seconds . ' seconds.',
+                );
+        }
 
         return view('repos.show')->with([
             'repo' => $repo,
