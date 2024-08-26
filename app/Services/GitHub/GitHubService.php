@@ -17,9 +17,12 @@ use App\Http\Integrations\GitHub\Requests\GetAuthUserRepos;
 use App\Http\Integrations\GitHub\Requests\GetRepo;
 use App\Http\Integrations\GitHub\Requests\GetRepoLanguages;
 use App\Http\Integrations\GitHub\Requests\UpdateRepo;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 
 final readonly class GitHubService implements GitHub
 {
+    use AlwaysThrowOnErrors;
+
     public function __construct(
         private string $token,
     ) {}
@@ -58,10 +61,6 @@ final readonly class GitHubService implements GitHub
             ->all();
     }
 
-    /**
-     * @throws \Saloon\Exceptions\Request\FatalRequestException
-     * @throws \Saloon\Exceptions\Request\RequestException
-     */
     public function createRepo(CreateRepoData $data): RepoData
     {
         return $this->connector()

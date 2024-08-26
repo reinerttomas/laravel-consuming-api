@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Integrations\GitHub;
 
+use App\Exceptions\Integrations\GitHub\GitHubException;
+use App\Exceptions\Integrations\GitHub\NotFoundException;
+use App\Exceptions\Integrations\GitHub\UnauthorizedException;
 use GuzzleHttp\Psr7\Header;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Connector;
@@ -14,6 +17,7 @@ use Saloon\PaginationPlugin\PagedPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Traits\Plugins\HasTimeout;
+use Throwable;
 
 final class GitHubConnector extends Connector implements HasPagination
 {
@@ -68,6 +72,27 @@ final class GitHubConnector extends Connector implements HasPagination
             {
                 return $response->dtoOrFail()->toArray();
             }
+        };
+    }
+
+    public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
+    {
+        return match ($response->status()) {
+            403 => new UnauthorizedException(
+                message: $response->body(),
+                code: $response->status(),
+                previous: $senderException,
+            ),
+            404 => new NotFoundException(
+                message: $response->body(),
+                code: $response->status(),
+                previous: $senderException,
+            ),
+            default => new GitHubException(
+                message: $response->body(),
+                code: $response->status(),
+                previous: $senderException,
+            ),
         };
     }
 }
