@@ -2,10 +2,23 @@
 
 declare(strict_types=1);
 
-arch('use string type check')
-    ->expect('App')
-    ->toUseStrictTypes();
+arch('php')
+    ->preset()
+    ->php();
 
-arch('do not leave debug statements')
-    ->expect(['dd', 'ddd', 'die', 'dump', 'ray', 'sleep', 'var_dump'])
-    ->toBeUsedInNothing();
+arch('security')
+    ->preset()
+    ->security();
+
+arch('laravel')
+    ->preset()
+    ->laravel()
+    ->ignoring('App\Http\Integrations');
+
+arch('strict')
+    ->expect('App')
+    ->toUseStrictTypes()
+    ->and([
+        'sleep',
+        'usleep',
+    ])->not->toBeUsed();

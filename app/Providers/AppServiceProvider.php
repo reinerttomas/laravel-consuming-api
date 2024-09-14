@@ -8,7 +8,7 @@ use App\Contracts\GitHub;
 use App\Services\GitHub\GitHubService;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
