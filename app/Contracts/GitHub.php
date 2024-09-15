@@ -11,7 +11,7 @@ use App\DataTransferObjects\GitHub\UpdateRepoData;
 
 interface GitHub
 {
-    public function getRepos(): RepoCollection;
+    public function getRepos(?int $perPage = null): RepoCollection;
 
     public function getRepo(string $owner, string $repoName): RepoData;
 

@@ -27,10 +27,11 @@ final readonly class GitHubService implements GitHub
         private string $token,
     ) {}
 
-    public function getRepos(): RepoCollection
+    public function getRepos(?int $perPage = null): RepoCollection
     {
         $repos = $this->connector()
             ->paginate(new GetAuthUserRepos)
+            ->setPerPageLimit($perPage)
             ->collect()
             ->ensure(RepoData::class);
 

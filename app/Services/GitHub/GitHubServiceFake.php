@@ -23,7 +23,7 @@ final class GitHubServiceFake implements GitHub
         private ?GitHubException $failureException = null,
     ) {}
 
-    public function getRepos(): RepoCollection
+    public function getRepos(?int $perPage = null): RepoCollection
     {
         return RepoCollection::make([
             $this->fakeRepo(),
