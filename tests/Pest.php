@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 use App\Contracts\GitHub;
 use App\Services\GitHub\GitHubServiceFake;
+use Tests\Expectations\GitHubServiceExpectation;
+
 use function Pest\Laravel\swap;
 
 uses(
@@ -34,6 +36,8 @@ uses(
 */
 
 expect()->extend('toBeOne', fn () => $this->toBe(1));
+
+GitHubServiceExpectation::register();
 
 /*
 |--------------------------------------------------------------------------

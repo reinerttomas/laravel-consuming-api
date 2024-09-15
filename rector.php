@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Set\ValueObject\SetList;
@@ -20,6 +21,7 @@ return RectorConfig::configure()
     ->withSkip([
         __DIR__ . '/bootstrap/cache',
         AddOverrideAttributeToOverriddenMethodsRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
     ])
     ->withPhpSets(php83: true)
     ->withSets([

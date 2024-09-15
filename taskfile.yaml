@@ -9,17 +9,9 @@ tasks:
     cmds:
       - ./vendor/bin/pint --config pint.json -v --test
 
-  ccs:fix:
-    cmds:
-      - ./vendor/bin/pint --config pint.json
-
   rector:
     cmds:
       - vendor/bin/rector --dry-run
-
-  rector:fix:
-    cmds:
-      - vendor/bin/rector
 
   test:
     cmds:
@@ -36,3 +28,11 @@ tasks:
     cmds:
       - task: rector:fix
       - task: ccs:fix
+
+  fix:ccs:
+    cmds:
+      - ./vendor/bin/pint --config pint.json
+
+  fix:rector:
+    cmds:
+      - vendor/bin/rector

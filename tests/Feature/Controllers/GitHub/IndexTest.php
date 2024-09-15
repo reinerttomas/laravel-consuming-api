@@ -11,7 +11,7 @@ it('returns view with repositories', function () {
     fakeGitHub();
 
     // Act & Assert
-    get(route('github.index'))
+    get(route('github.repos.index'))
         ->assertOk()
         ->assertViewIs('repos.index')
         ->assertViewHas(

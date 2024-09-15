@@ -56,7 +56,7 @@ final class GitHubController extends Controller
             $repo = $gitHub->createRepo($request->toDto());
         } catch (GitHubException $e) {
             return \redirect()
-                ->route('github.repos.create')
+                ->route('github.repos.store')
                 ->with('error', $e->getMessage());
         }
 

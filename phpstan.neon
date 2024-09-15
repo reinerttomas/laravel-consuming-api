@@ -15,11 +15,11 @@ parameters:
 	            - tests/*
 
 	    -
-	        message: '#^Call to an undefined method Pest\\PendingCalls\\TestCall::expect\(\).#'
+	        message: '#^Call to an undefined method Pest\\PendingCalls\\TestCall::.*\(\).#'
 	        paths:
 	            - tests/*
 
 	    -
-	        message: '#^Call to an undefined method Pest\\PendingCalls\\TestCall::preset\(\).#'
+	        message: '#^Call to an undefined method Pest\\Expectation.*\(\).#'
 	        paths:
 	            - tests/*

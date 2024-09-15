@@ -9,11 +9,20 @@ use App\Contracts\GitHub;
 use App\DataTransferObjects\GitHub\CreateRepoData;
 use App\DataTransferObjects\GitHub\RepoData;
 use App\DataTransferObjects\GitHub\UpdateRepoData;
+use App\Exceptions\Integrations\GitHub\GitHubException;
 use App\Exceptions\NotImplementedException;
-use Faker\Generator;
+use Illuminate\Support\Collection;
 
-final readonly class GitHubServiceFake implements GitHub
+final class GitHubServiceFake implements GitHub
 {
+    /**
+     * @param  Collection<int, CreateRepoData>  $reposToCreate
+     */
+    public function __construct(
+        private readonly Collection $reposToCreate = new Collection,
+        private ?GitHubException $failureException = null,
+    ) {}
+
     public function getRepos(): RepoCollection
     {
         return RepoCollection::make([
@@ -34,7 +43,13 @@ final readonly class GitHubServiceFake implements GitHub
 
     public function createRepo(CreateRepoData $data): RepoData
     {
-        throw new NotImplementedException;
+        if ($this->failureException !== null) {
+            throw $this->failureException;
+        }
+
+        $this->reposToCreate->push($data);
+
+        return $this->fakeRepo('owner', $data->name);
     }
 
     public function updateRepo(string $owner, string $repoName, UpdateRepoData $data): RepoData
@@ -47,19 +62,33 @@ final readonly class GitHubServiceFake implements GitHub
         throw new NotImplementedException;
     }
 
+    /**
+     * @return Collection<int, CreateRepoData>
+     */
+    public function getReposToCreate(): Collection
+    {
+        return $this->reposToCreate;
+    }
+
+    public function shouldFailWithException(GitHubException $exception): self
+    {
+        $this->failureException = $exception;
+
+        return $this;
+    }
+
     private function fakeRepo(?string $owner = null, ?string $name = null): RepoData
     {
-        $faker = app(Generator::class);
-        $owner ??= $faker->word;
-        $name ??= $faker->word;
+        $owner ??= fake()->word;
+        $name ??= fake()->word;
 
         return new RepoData(
-            id: $faker->randomNumber(),
+            id: fake()->randomNumber(),
             owner: $owner,
             name: $name,
             fullName: $owner . '/' . $name,
-            private: $faker->boolean(),
-            description: $faker->sentence,
+            private: fake()->boolean(),
+            description: fake()->sentence,
             createdAt: now(),
         );
     }
