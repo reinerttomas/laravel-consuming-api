@@ -13,6 +13,10 @@ declare(strict_types=1);
 |
 */
 
+use App\Contracts\GitHub;
+use App\Services\GitHub\GitHubServiceFake;
+use function Pest\Laravel\swap;
+
 uses(
     Tests\TestCase::class,
     // Illuminate\Foundation\Testing\RefreshDatabase::class,
@@ -42,7 +46,11 @@ expect()->extend('toBeOne', fn () => $this->toBe(1));
 |
 */
 
-function something(): void
+function fakeGitHub(): GitHubServiceFake
 {
-    // ..
+    $gitHubServiceFake = new GitHubServiceFake;
+
+    swap(GitHub::class, $gitHubServiceFake);
+
+    return $gitHubServiceFake;
 }
