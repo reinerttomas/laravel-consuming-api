@@ -22,7 +22,7 @@ it('can create repo', function (array $data) {
             && $repo->isPrivate === $data['isPrivate']
     );
 })->with([
-    'test-repo' => fn (): array => [
+    fn (): array => [
         'name' => 'test-repo',
         'description' => 'test-description',
         'isPrivate' => true,
@@ -42,7 +42,7 @@ it('can redirect back if an error occurs', function (array $data) {
 
     expect($gitHubFake)->toHaveEmptyCreatedRepo();
 })->with([
-    'test-repo' => fn (): array => [
+    fn (): array => [
         'name' => 'test-repo',
         'description' => 'test-description',
         'isPrivate' => true,

@@ -23,3 +23,8 @@ parameters:
 	        message: '#^Call to an undefined method Pest\\Expectation.*\(\).#'
 	        paths:
 	            - tests/*
+
+	    -
+	        message: '#^Access to an undefined property Pest\\Mixins\\Expectation.*::\$.*.#'
+	        paths:
+	            - tests/*
